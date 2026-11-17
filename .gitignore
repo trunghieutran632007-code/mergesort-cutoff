@@ -1,0 +1,24 @@
+# Java
+*.class
+out/
+bin/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Dữ liệu lớn (> 10^6 phần tử): không đưa lên git,
+# tái tạo bằng generator + seed + SHA-256 trong data/manifest.csv
+data/*_10000000.bin
+data/*_2097152.bin
+data/*_4194304.bin
+data/*_8388608.bin

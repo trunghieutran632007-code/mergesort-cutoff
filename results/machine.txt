@@ -1,0 +1,31 @@
+# Cấu hình máy, ghi lúc 2026-11-17 09:18:14
+
+## Hệ điều hành
+ProductName:		macOS
+ProductVersion:		26.5.1
+BuildVersion:		25F80
+
+## CPU
+Model: Apple M2
+Kiến trúc: arm64
+Số nhân vật lý: 8
+Số luồng logic: 8
+Nhân hiệu năng (P-core): 4
+Nhân tiết kiệm (E-core): 4
+
+## Bộ nhớ
+RAM: 16 GB
+
+## Java
+java version "25.0.1" 2025-10-21 LTS
+Java(TM) SE Runtime Environment (build 25.0.1+8-LTS-27)
+Java HotSpot(TM) 64-Bit Server VM (build 25.0.1+8-LTS-27, mixed mode, sharing)
+
+## Python
+Python 3.12.7
+
+## Nguồn điện lúc ghi
+Now drawing from 'AC Power'
+
+## JVM flags dùng khi đo
+(điền ở Bước 4, ví dụ: -Xms4g -Xmx4g)
