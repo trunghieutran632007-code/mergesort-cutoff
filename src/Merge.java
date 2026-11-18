@@ -34,6 +34,7 @@ public class Merge {
     }
 
     private static void sort(int[] a, int[] aux, int lo, int hi, int cutoff) {
+        if (hi <= lo) return;
         if (hi <= lo + cutoff - 1) {
             insertionSort(a, lo, hi);
             return;
@@ -44,7 +45,7 @@ public class Merge {
         merge(a, aux, lo, mid, hi);
     }
 
-    public boolean isSorted(int[] a) {
+    public static boolean isSorted(int[] a) {
         for (int i = 1; i < a.length; i++) {
             if (a[i] < a[i - 1]) return false;
         }

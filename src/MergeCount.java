@@ -23,6 +23,26 @@ public class MergeCount {
         }
     }
 
+    public static long sort(int[] a, int cutoff) {
+        compares = 0;
+        int n = a.length;
+        int[] aux = new int[n];
+        sort(a, aux, 0, n - 1, cutoff);
+        return compares;
+    }
+
+    private static void sort(int[] a, int[] aux, int lo, int hi, int cutoff) {
+        if (hi <= lo) return;
+        if (hi <= lo + cutoff - 1) {
+            insertionSort(a, lo, hi);
+            return;
+        }
+        int mid = lo + (hi - lo) / 2;
+        sort(a, aux, lo, mid, cutoff);
+        sort(a, aux, mid + 1, hi, cutoff);
+        merge(a, aux, lo, mid, hi);
+    }
+
     private static void insertionSort(int[] a, int lo, int hi) {
         for (int i = lo + 1; i <= hi; i++) {
             int key = a[i];
