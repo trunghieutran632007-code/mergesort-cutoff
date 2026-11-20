@@ -1,0 +1,6 @@
+# Thư viện Python cho scripts/analyze.py, scripts/leaf_sizes.py, scripts/check_pilot.py
+# Đúng phiên bản đã dùng khi phân tích (Python 3.12.7)
+pandas==3.1.1
+numpy==2.5.5
+scipy==1.18.1
+matplotlib==3.11.2
