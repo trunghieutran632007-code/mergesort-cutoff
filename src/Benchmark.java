@@ -49,6 +49,8 @@ import java.util.regex.Pattern;
  * SHA-256 dữ liệu đối chiếu data/manifest.csv, thời gian warm-up/đo, thời gian JIT lúc đo.
  *
  * Harness chỉ gọi Merge.sort và Merge.isSorted, không tự cài thuật toán sắp xếp nào.
+ * Các hàm tiện ích (đọc tham số, manifest, file meta, đếm GC/JIT) để mức package, không private,
+ * để CompareCount (TN3) và SmallBench (TN4) dùng lại.
  *
  * Cách dùng (từ thư mục gốc, sau khi javac -encoding UTF-8 -d out src/*.java):
  *   java -Xms4g -Xmx4g -cp out Benchmark --exp tn1 --data data/random_1000000.bin
@@ -60,13 +62,13 @@ import java.util.regex.Pattern;
 public final class Benchmark {
 
     private static final String DEFAULT_CUTOFFS = "0-30,40,50,64";
-    private static final long DEFAULT_SEED = 20261109L;
-    private static final long WARMUP_MIN_NS = 1_000_000_000L; // warm-up kéo dài ít nhất 1 giây
+    static final long DEFAULT_SEED = 20261109L;
+    static final long WARMUP_MIN_NS = 1_000_000_000L; // warm-up kéo dài ít nhất 1 giây
     private static final long MAX_K = 1_000_000L;
     private static final long MAX_BUFFER_BYTES = 1L << 30; // tổng K bản sao không quá 1 GB
     private static final String CSV_HEADER = "experiment,dist,n,cutoff,trial,k,ns_per_sort,pos,gc";
     private static final Pattern DATA_NAME = Pattern.compile("([A-Za-z]+)_(\\d{1,10})\\.bin");
-    private static final DateTimeFormatter STAMP = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+    static final DateTimeFormatter STAMP = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
     private static final String USAGE = "Cách dùng: java -Xms4g -Xmx4g -cp out Benchmark --exp <tên> --data <file .bin>"
             + " [--cutoffs " + DEFAULT_CUTOFFS + "] [--trials 30] [--warmup 50] [--min-ms 20]"
             + " [--seed " + DEFAULT_SEED + "] [--out <file .csv>]";
@@ -94,7 +96,7 @@ public final class Benchmark {
         SortError(String message) { super(message); }
     }
 
-    private record ManifestInfo(String status, String seed) {}
+    record ManifestInfo(String status, String seed) {}
 
     public static void main(String[] args) {
         Options o;
@@ -289,7 +291,7 @@ public final class Benchmark {
     }
 
     /** Trộn Fisher–Yates. */
-    private static void shuffle(int[] a, Random r) {
+    static void shuffle(int[] a, Random r) {
         for (int i = a.length - 1; i > 0; i--) {
             int j = r.nextInt(i + 1);
             int t = a[i];
@@ -298,7 +300,7 @@ public final class Benchmark {
         }
     }
 
-    private static long gcCount() {
+    static long gcCount() {
         long total = 0;
         for (GarbageCollectorMXBean gc : GCS) {
             long c = gc.getCollectionCount();
@@ -308,7 +310,7 @@ public final class Benchmark {
     }
 
     /** Tổng thời gian JIT đã biên dịch (ms), -1 nếu JVM không hỗ trợ đo. */
-    private static long jitMillis() {
+    static long jitMillis() {
         return (JIT != null && JIT.isCompilationTimeMonitoringSupported()) ? JIT.getTotalCompilationTime() : -1;
     }
 
@@ -317,7 +319,7 @@ public final class Benchmark {
     // ------------------------------------------------------------------
 
     /** Lấy tên phân bố từ tên file <dist>_<N>.bin và kiểm tra N trong tên khớp số phần tử. */
-    private static String distFromFileName(String fileName, int n) throws IOException {
+    static String distFromFileName(String fileName, int n) throws IOException {
         Matcher mt = DATA_NAME.matcher(fileName);
         if (!mt.matches()) {
             return fileName.replaceFirst("\\.bin$", "").replaceAll("[^A-Za-z0-9]", "_");
@@ -329,7 +331,7 @@ public final class Benchmark {
     }
 
     /** Đối chiếu SHA-256 của file dữ liệu với manifest.csv cùng thư mục. Khác manifest thì báo lỗi. */
-    private static ManifestInfo checkManifest(Path dataPath, String sha) throws IOException {
+    static ManifestInfo checkManifest(Path dataPath, String sha) throws IOException {
         Path manifest = dataPath.toAbsolutePath().getParent().resolve("manifest.csv");
         if (!Files.exists(manifest)) return new ManifestInfo("không có manifest.csv", "");
         String fileName = dataPath.getFileName().toString();
@@ -346,13 +348,13 @@ public final class Benchmark {
         return new ManifestInfo("không có trong manifest", "");
     }
 
-    private static Path metaPathFor(Path csv) {
+    static Path metaPathFor(Path csv) {
         String name = csv.getFileName().toString().replaceFirst("\\.csv$", "");
         return csv.resolveSibling(name + ".meta.txt");
     }
 
-    private static void writeMeta(Path p, Map<String, String> meta) throws IOException {
-        StringBuilder sb = new StringBuilder("# Thông tin lần chạy Benchmark (key=value), đi kèm ")
+    static void writeMeta(Path p, Map<String, String> meta) throws IOException {
+        StringBuilder sb = new StringBuilder("# Thông tin lần chạy (key=value), đi kèm ")
                 .append(meta.get("csv")).append('\n');
         for (Map.Entry<String, String> e : meta.entrySet()) {
             sb.append(e.getKey()).append('=').append(e.getValue().replace('\n', ' ')).append('\n');
@@ -412,18 +414,18 @@ public final class Benchmark {
         return set.stream().mapToInt(Integer::intValue).toArray();
     }
 
-    private static int atLeast(String s, int min, String flag) {
+    static int atLeast(String s, int min, String flag) {
         int v = Integer.parseInt(s.trim());
         if (v < min) throw new IllegalArgumentException(flag + " phải >= " + min + ": " + v);
         return v;
     }
 
-    private static String need(String value, String flag) {
+    static String need(String value, String flag) {
         if (value == null) throw new IllegalArgumentException("Thiếu giá trị sau " + flag);
         return value;
     }
 
-    private static String joinInts(int[] a) {
+    static String joinInts(int[] a) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < a.length; i++) {
             if (i > 0) sb.append(',');
@@ -433,7 +435,7 @@ public final class Benchmark {
     }
 
     /** Định dạng số luôn dùng dấu chấm thập phân, bất kể locale của máy. */
-    private static String fmt(String pattern, Object... args) {
+    static String fmt(String pattern, Object... args) {
         return String.format(Locale.ROOT, pattern, args);
     }
 }

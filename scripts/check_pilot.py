@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Bước 4: kiểm tra nhanh số liệu chạy thử (pilot) của Benchmark.
+Dùng được cho CSV của TN1, TN2, TN5 ở Bước 5 (cùng harness Benchmark); khi đó bỏ qua mục [4].
 
 Cách dùng (từ thư mục gốc project):
     .venv/bin/python scripts/check_pilot.py                     # đợt pilot mới nhất trong results/
@@ -277,12 +278,14 @@ def main():
     ok2 = check_noise(st, df)
     print("\n[3] CV = sd / mean (yêu cầu < 5%), độ trôi, GC, JIT:")
     ok3 = check_cv(st, df, metas)
-    print("\n[4] Ước lượng thời gian chạy Bước 5:")
-    estimate(st, df, metas)
+    is_pilot = (df["experiment"] == "pilot").all()
+    if is_pilot:  # với file của TN1, TN2, TN5 (Bước 5) thì không cần ước lượng
+        print("\n[4] Ước lượng thời gian chạy Bước 5:")
+        estimate(st, df, metas)
 
     print("\nTóm tắt: [1] " + ("OK" if not problems else "LỖI")
           + " | [2] " + ("OK" if ok2 else "xem lại") + " | [3] " + ("OK" if ok3 else "xem lại")
-          + " | [4] xem ước lượng ở trên")
+          + (" | [4] xem ước lượng ở trên" if is_pilot else ""))
     sys.exit(1 if problems else 0)
 
 
