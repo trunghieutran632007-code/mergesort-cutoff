@@ -22,3 +22,8 @@ data/*_10000000.bin
 data/*_2097152.bin
 data/*_4194304.bin
 data/*_8388608.bin
+
+# Số liệu bị loại vì hai đợt đo chạy chồng nhau: chỉ giữ trên máy,
+# riêng file ghi chú lý do thì đưa lên git
+results/bi-chay-chong/*
+!results/bi-chay-chong/GHI-CHU.md
