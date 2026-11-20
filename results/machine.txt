@@ -1,4 +1,4 @@
-# Cấu hình máy, ghi lúc 2026-11-17 09:18:14
+# Cấu hình máy, ghi lúc 2026-11-20 10:20:12
 
 ## Hệ điều hành
 ProductName:		macOS
@@ -7,6 +7,7 @@ BuildVersion:		25F80
 
 ## CPU
 Model: Apple M2
+Mã máy: Mac14,2
 Kiến trúc: arm64
 Số nhân vật lý: 8
 Số luồng logic: 8
@@ -28,4 +29,5 @@ Python 3.12.7
 Now drawing from 'AC Power'
 
 ## JVM flags dùng khi đo
-(điền ở Bước 4, ví dụ: -Xms4g -Xmx4g)
+-Xms4g -Xmx4g
+(lấy từ scripts/config.sh; mỗi lần chạy Benchmark còn ghi cờ thực tế vào file .meta.txt đi kèm CSV)

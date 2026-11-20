@@ -1,0 +1,90 @@
+# Pilot 20261120_095017
+Nguồn điện: Now drawing from 'AC Power'
+JVM flags: -Xms4g -Xmx4g -XX:+AlwaysPreTouch
+Cutoffs: 0,1,5,10,20 | trials: 5 | warm-up: 50 | N: 100000 1000000
+
+Benchmark [pilot random n=100000]
+  dữ liệu : data/random_100000.bin (SHA-256 khớp manifest, seed 20261109000100000)
+  cutoffs : 0,1,5,10,20  (5 giá trị)
+  trials = 5, seed trộn = 20261109, System.gc() trước mỗi phép đo: có
+  JVM     : -Xms4g -Xmx4g -XX:+AlwaysPreTouch | Java 25.0.1 | heap tối đa 4096 MB
+  warm-up : 146 lần sort, 1.00 s, JIT 50 ms
+  K = 4 (tự chọn: sort nhanh nhất lúc warm-up 5.867 ms, mỗi phép đo >= 20 ms)
+  ghi vào : results/pilot_random_100000_20261120_095017.csv
+[pilot random n=100000] trial 1/5 xong  (đã đo 0.2 s, còn khoảng 0.6 s)
+[pilot random n=100000] trial 2/5 xong  (đã đo 0.3 s, còn khoảng 0.5 s)
+[pilot random n=100000] trial 3/5 xong  (đã đo 0.5 s, còn khoảng 0.3 s)
+[pilot random n=100000] trial 4/5 xong  (đã đo 0.6 s, còn khoảng 0.2 s)
+[pilot random n=100000] trial 5/5 xong  (đã đo 0.8 s, còn khoảng 0.0 s)
+Xong [pilot random n=100000]: 25 phép đo trong 0.8 s (tính giờ 0.7 s), warm-up 1.0 s.
+  JIT biên dịch thêm trong lúc đo: 30 ms | GC trong vùng tính giờ: 0 lần
+  CSV : results/pilot_random_100000_20261120_095017.csv
+  meta: results/pilot_random_100000_20261120_095017.meta.txt
+Tiến trình JVM cho N = 100000 chạy hết 2 s (kể cả khởi động JVM)
+
+Benchmark [pilot random n=1000000]
+  dữ liệu : data/random_1000000.bin (SHA-256 khớp manifest, seed 20261109001000000)
+  cutoffs : 0,1,5,10,20  (5 giá trị)
+  trials = 5, seed trộn = 20261109, System.gc() trước mỗi phép đo: có
+  JVM     : -Xms4g -Xmx4g -XX:+AlwaysPreTouch | Java 25.0.1 | heap tối đa 4096 MB
+  warm-up : 50 lần sort, 4.07 s, JIT 51 ms
+  K = 1 (tự chọn: sort nhanh nhất lúc warm-up 72.301 ms, mỗi phép đo >= 20 ms)
+  ghi vào : results/pilot_random_1000000_20261120_095017.csv
+[pilot random n=1000000] trial 1/5 xong  (đã đo 0.4 s, còn khoảng 1.7 s)
+[pilot random n=1000000] trial 2/5 xong  (đã đo 0.8 s, còn khoảng 1.3 s)
+[pilot random n=1000000] trial 3/5 xong  (đã đo 1.3 s, còn khoảng 0.8 s)
+[pilot random n=1000000] trial 4/5 xong  (đã đo 1.7 s, còn khoảng 0.4 s)
+[pilot random n=1000000] trial 5/5 xong  (đã đo 2.1 s, còn khoảng 0.0 s)
+Xong [pilot random n=1000000]: 25 phép đo trong 2.1 s (tính giờ 2.0 s), warm-up 4.1 s.
+  JIT biên dịch thêm trong lúc đo: 28 ms | GC trong vùng tính giờ: 0 lần
+  CSV : results/pilot_random_1000000_20261120_095017.csv
+  meta: results/pilot_random_1000000_20261120_095017.meta.txt
+Tiến trình JVM cho N = 1000000 chạy hết 7 s (kể cả khởi động JVM)
+
+Kiểm tra pilot: pilot_random_1000000_20261120_095017.csv, pilot_random_100000_20261120_095017.csv
+
+[1] Định dạng CSV và meta: OK
+  50 phép đo, 2 cấu hình (dist, n).
+
+  random, n = 100,000 (K = 4 lần sort mỗi phép đo, 5 trial)
+    cutoff   median ms     mean ms      sd ms    CV %      min ms   T(c)/T(0)
+         0      7.1012      7.1124     0.0443    0.62      7.0687      1.0000
+         1      7.0681      7.0907     0.0505    0.71      7.0377      0.9953
+         5      6.6030      6.7494     0.3761    5.57      6.5357      0.9298   <- CV >= 5%
+        10      6.2224      6.2239     0.0281    0.45      6.1973      0.8762
+        20      5.9061      5.9129     0.0266    0.45      5.8796      0.8317
+
+  random, n = 1,000,000 (K = 1 lần sort mỗi phép đo, 5 trial)
+    cutoff   median ms     mean ms      sd ms    CV %      min ms   T(c)/T(0)
+         0     85.5701     85.4864     0.2115    0.25     85.1765      1.0000
+         1     85.4853     85.5494     0.1455    0.17     85.3989      0.9990
+         5     78.7468     78.8054     0.1040    0.13     78.7264      0.9203
+        10     75.1674     75.3095     0.3048    0.40     74.9968      0.8784
+        20     72.3731     72.3888     0.3087    0.43     72.0995      0.8458
+
+[2] Cutoff 0 so với cutoff 1 (tương đương nhau, chênh lệch = mức nhiễu đo):
+  random n = 100,000: median cutoff 1 so với cutoff 0: -0.47%  (tốt); từng trial: -0.83% .. +0.64%
+      để so sánh: cutoff tốt nhất trong pilot là 20, nhanh hơn cutoff 0 16.8% (gấp 36 lần mức nhiễu trên)
+  random n = 1,000,000: median cutoff 1 so với cutoff 0: -0.10%  (tốt); từng trial: -0.26% .. +0.33%
+      để so sánh: cutoff tốt nhất trong pilot là 20, nhanh hơn cutoff 0 15.4% (gấp 156 lần mức nhiễu trên)
+
+[3] CV = sd / mean (yêu cầu < 5%), độ trôi, GC, JIT:
+  random n = 100,000: CV lớn nhất 5.57% (cutoff 5) -> VƯỢT 5% ở cutoff 5
+      theo trial (thời gian / median của cutoff đó): 1.000 1.000 0.996 1.000 1.011
+      theo vị trí trong trial (pos):                 0.996 1.000 1.000 1.000 1.000
+      GC trong vùng tính giờ: 0 lần | JIT trong lúc đo: 30 ms (warm-up: 146 lần sort, 1.003 s, JIT 50 ms)
+  random n = 1,000,000: CV lớn nhất 0.43% (cutoff 20) -> OK
+      theo trial (thời gian / median của cutoff đó): 0.999 1.000 1.000 1.000 1.000
+      theo vị trí trong trial (pos):                 1.000 1.000 0.999 1.001 1.000
+      GC trong vùng tính giờ: 0 lần | JIT trong lúc đo: 28 ms (warm-up: 50 lần sort, 4.070 s, JIT 51 ms)
+
+[4] Ước lượng thời gian chạy Bước 5:
+  TN1  ~   8.9 phút   random N = 10^4, 10^5, 10^6 (30 trial), 10^7 (10 trial); 34 cutoff
+  TN2  ~   4.2 phút   4 phân bố, N = 10^6, 34 cutoff, 20 trial (tính như random)
+  TN3  ~   0.4 phút   đếm so sánh, N = 10^6, cutoff 0..64, 3 trial (MergeCount, giả sử chậm hơn 1.5 lần)
+  TN4  ~   1.5 phút   n = 2..64, 2 cách sort, 30 trial, mỗi phép đo >= 20 ms (rất thô, harness chưa viết)
+  TN5  ~   2.5 phút   random N = 2^17..2^23, 4 cutoff, 10 trial
+  Tổng TN1–TN5 ~ 18 phút; chạy lại TN1 lần 2 thêm ~ 9 phút. Chưa tính thời gian nghỉ giữa các TN.
+  (Thời gian một lần sort ngoại suy theo N log N từ pilot gần nhất; phân bố khác random có thể nhanh/chậm hơn.)
+
+Tóm tắt: [1] OK | [2] OK | [3] xem lại | [4] xem ước lượng ở trên

@@ -3,6 +3,7 @@
 # Chạy lại trước mỗi đợt đo chính thức để số liệu đi kèm đúng cấu hình.
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$ROOT/results/machine.txt"
+source "$ROOT/scripts/config.sh"
 {
   echo "# Cấu hình máy, ghi lúc $(date '+%Y-%m-%d %H:%M:%S')"
   echo
@@ -11,6 +12,7 @@ OUT="$ROOT/results/machine.txt"
   echo
   echo "## CPU"
   echo "Model: $(sysctl -n machdep.cpu.brand_string)"
+  echo "Mã máy: $(sysctl -n hw.model)"
   echo "Kiến trúc: $(uname -m)"
   echo "Số nhân vật lý: $(sysctl -n hw.physicalcpu)"
   echo "Số luồng logic: $(sysctl -n hw.logicalcpu)"
@@ -33,7 +35,8 @@ OUT="$ROOT/results/machine.txt"
   pmset -g ps | head -1
   echo
   echo "## JVM flags dùng khi đo"
-  echo "(điền ở Bước 4, ví dụ: -Xms4g -Xmx4g)"
+  echo "$JVM_FLAGS"
+  echo "(lấy từ scripts/config.sh; mỗi lần chạy Benchmark còn ghi cờ thực tế vào file .meta.txt đi kèm CSV)"
 } > "$OUT"
 echo "Đã ghi $OUT:"
 echo
