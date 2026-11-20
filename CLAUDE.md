@@ -10,7 +10,7 @@ Máy đo: macOS, cấu hình ghi trong results/machine.txt.
 - Không dùng hay tham khảo cài đặt mergesort khác (algs4 Merge/MergeX, mã trên mạng).
   Arrays.sort chỉ được dùng trong test để đối chiếu kết quả.
 - Được phép: test tính đúng, harness đo thời gian, script sinh dữ liệu,
-  script phân tích và vẽ đồ thị, góp ý báo cáo.
+  script phân tích và vẽ đồ thị.
 
 ## Quy ước
 - Java chuẩn: System.out.println, Scanner/BufferedReader.
