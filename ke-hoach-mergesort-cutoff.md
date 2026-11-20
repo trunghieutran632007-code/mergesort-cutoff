@@ -1,4 +1,4 @@
-# Kế hoạch project: Tìm CUTOFF tối ưu cho Mergesort
+# Kế hoạch project: Tìm CUTOFF tối ưu cho Mergesort (thay thế cho log chat với AI)
 
 9/11/2026 · Hiếu
 
